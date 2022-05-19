@@ -9,12 +9,16 @@
       Which version of Vue should ESG use?
       <span style="font-weight: bold">{{ vueVersion }}</span>
     </p>
+    <p>Variant: {{ backgroundColorVariant }}</p>
+    <div v-if="backgroundColorVariant && backgroundColorVariant.enabled">
+      <button :style="buttonStyle">Do nothing button</button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { UnleashClient } from "unleash-proxy-client";
+import { UnleashClient, IVariant } from "unleash-proxy-client";
 
 @Component
 export default class HelloWorld extends Vue {
@@ -23,12 +27,24 @@ export default class HelloWorld extends Vue {
 
   isI18nEnabled = false;
   vueVersion = "";
+  backgroundColorVariant: IVariant | null = null;
+  buttonStyle: Record<string, string> = {};
 
   updateFeatureFlags() {
     this.isI18nEnabled = this.featureToggerClient.isEnabled("IS_18N_ENABLED");
     this.vueVersion = this.featureToggerClient.isEnabled("IS_VUE3_COOL")
       ? "Vue 3 + Vite is cool"
       : "Stick with Vue 2 but I won't like it";
+    this.backgroundColorVariant =
+      this.featureToggerClient.getVariant("BACKGROUND_COLOR");
+
+    const buttonVariantMap: Record<string, Record<string, string>> = {
+      orange: { backgroundColor: "orange" },
+      blue: { backgroundColor: "blue" },
+      green: { backgroundColor: "green" },
+    };
+
+    this.buttonStyle = buttonVariantMap[this.backgroundColorVariant.name];
   }
 
   mounted() {
@@ -56,5 +72,11 @@ li {
 }
 a {
   color: #42b983;
+}
+
+button {
+  padding: 16px;
+  margin-bottom: 16px;
+  color: white;
 }
 </style>
