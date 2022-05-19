@@ -1,20 +1,34 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <HelloWorld
+      msg="Test feature flag with Unleash Proxy"
+      :featureToggerClient="featureToggerClient"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import HelloWorld from "./components/HelloWorld.vue";
+import { unleash } from "./config/feature-toggle.config";
 
 @Component({
   components: {
     HelloWorld,
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  featureToggerClient = unleash;
+
+  mounted() {
+    this.featureToggerClient.start();
+  }
+
+  unmounted() {
+    this.featureToggerClient.stop();
+  }
+}
 </script>
 
 <style lang="scss">
