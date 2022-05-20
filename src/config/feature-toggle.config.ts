@@ -1,7 +1,7 @@
 import { UnleashClient } from "unleash-proxy-client";
 
 const config = {
-  url: "http://localhost:3000/proxy",
+  url: "http://localhost:4000/proxy",
   clientKey: "my-secret-key",
   appName: "connie-feature-flag",
   environment: "development",

@@ -42,6 +42,7 @@ export default class HelloWorld extends Vue {
       orange: { backgroundColor: "orange" },
       blue: { backgroundColor: "blue" },
       green: { backgroundColor: "green" },
+      purple: { backgroundColor: "purple" },
     };
 
     this.buttonStyle = buttonVariantMap[this.backgroundColorVariant.name];
